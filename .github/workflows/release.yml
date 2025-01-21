@@ -1,0 +1,28 @@
+name: release pdf
+
+on:
+  push:
+    tags:
+      - "*"
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Compile pdf and make release
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Compile all
+        uses: docker://ghcr.io/kiyou/latex:latest
+        with:
+          entrypoint: 'make'
+      - name: Release
+        uses: softprops/action-gh-release@v1
+#        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            *.pdf
+            supplement/*.pdf
+          draft: true

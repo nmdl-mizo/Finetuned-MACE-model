@@ -1,0 +1,30 @@
+*~
+*.out
+*.fgx
+*.tbx
+*.aux
+*.log
+*.dvi
+*.pdf
+*.swp
+*.bbl
+*.blg
+*.vdx
+*.fls
+*.html
+*.synctex.*
+*Notes.bib
+!.latexmkrc
+*.fdb_latexmk
+#Binaries
+#*.eps
+#*.png
+#*.pptx
+#*.emf
+#*.blend
+*.exe
+#Igor Pro
+*.pxp
+# Bitbucket pipeline
+!bitbucket-pipelines.yml
+*.docx
