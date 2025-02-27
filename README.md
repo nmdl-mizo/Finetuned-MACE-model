@@ -2,7 +2,7 @@
 This model is the BTO finetuned MACE model that can be applied to bulk and defect-containing BTO systems. To use the models please install the MACE code.
 
 ## Example
-In this example, the energy of a BTO crystal and acetic acid is calculated using universal multi-domain MLIP MACE-Osaka24 and Atomic Simulation Environment (ASE).
+In this example, the energy of a BTO crystal is calculated by BTO finetuned MACE model and Atomic Simulation Environment (ASE).
 ```
 from ase.io import read
 from mace.calculators import MACECalculator
