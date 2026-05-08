@@ -1,7 +1,7 @@
 #!/bin/bash
 mace_run_train \
     --name="MACE_BTO" \
-    --train_file="./train.xyz" \
+    --train_file="../../train.xyz" \
     --valid_fraction=0.05 \
     --energy_key="energy" \
     --forces_key="forces" \
