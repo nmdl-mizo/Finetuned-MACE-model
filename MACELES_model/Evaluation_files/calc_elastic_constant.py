@@ -9,9 +9,8 @@ from pymatgen.analysis.eos import EOS
 from pymatgen.analysis.elasticity.strain import Deformation
 from pymatgen.analysis.elasticity.elastic import ElasticTensor
 
-structure = read("/home/poyen/BTO_MLFF/tetragonal/structurerelaxation_PS/CONTCAR")
-calc =  mace_mp(model="/home/poyen/BTO_MLFF/MACE/MACE_large_100.model", device='cuda')
-#calc =  mace_mp(model="/home/poyen/BTO_MLFF/MACE/LES_model/test/MACE_BTO.model", device='cuda')
+structure = read("./POSCAR_primitive")
+calc =  mace_mp(model="../../BTO_MACE.model", device='cuda')
 structure.calc = calc
 ucf = UnitCellFilter(structure)
 opt = BFGS(ucf)
