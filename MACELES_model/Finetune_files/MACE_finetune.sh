@@ -1,42 +1,23 @@
 #!/bin/bash
 mace_run_train \
     --name="MACE_BTO" \
-    --model="MACELES" \
-    --train_file="train.xyz" \
+    --train_file="./train.xyz" \
     --valid_fraction=0.05 \
-    --energy_weight=1.0 \
-    --forces_weight=1.0 \
-    --E0s="average" \
-    --lr=0.01 \
-    --scaling="rms_forces_scaling" \
+    --energy_key="energy" \
+    --forces_key="forces" \
+    --E0s='average' \
+    --model="MACELES" \
+    --hidden_irreps='128x0e + 128x1o' \
+    --r_max=6 \
     --num_interactions=2 \
-    --num_channels=192 \
-    --max_L=1 \
-    --correlation=3 \
-    --r_max=4.5 \
-    --forces_weight=1000 \
-    --energy_weight=40 \
-    --weight_decay=5e-10 \
-    --clip_grad=1.0 \
-    --batch_size=8 \
-    --valid_batch_size=8 \
-    --max_num_epochs=500 \
-    --scheduler_patience=40 \
-    --patience=20 \
-    --eval_interval=1 \
+    --batch_size=10 \
+    --max_num_epochs=1000 \
+    --stage_two \
+    --start_stage_two=500 \
     --ema \
-    --swa \
-    --start_swa=400 \
-    --swa_lr=0.00025 \
-    --swa_forces_weight=10 \
-    --num_workers=64 \
-    --error_table='PerAtomMAE' \
-    --default_dtype="float32"\
-    --device=cuda \
-    --seed=123 \
+    --ema_decay=0.99 \
+    --amsgrad \
     --restart_latest \
-    --distributed \
+    --device=cuda \
     --save_cpu \
-    --forces_key='forces'\
-    --energy_key='energy'\
-    --multiheads False \
+    --patience=20 \
