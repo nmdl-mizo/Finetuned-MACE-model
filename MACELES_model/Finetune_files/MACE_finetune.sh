@@ -1,7 +1,7 @@
 #!/bin/bash
 mace_run_train \
-    --name="MACE_fintune" \
-    --foundation_model="large" \
+    --name="MACE_BTO" \
+    --model="MACELES" \
     --train_file="train.xyz" \
     --valid_fraction=0.05 \
     --energy_weight=1.0 \
@@ -9,21 +9,34 @@ mace_run_train \
     --E0s="average" \
     --lr=0.01 \
     --scaling="rms_forces_scaling" \
+    --num_interactions=2 \
+    --num_channels=192 \
+    --max_L=1 \
+    --correlation=3 \
+    --r_max=4.5 \
+    --forces_weight=1000 \
+    --energy_weight=40 \
+    --weight_decay=5e-10 \
+    --clip_grad=1.0 \
     --batch_size=8 \
-    --max_num_epochs=100 \
-    --valid_batch_size=8\
+    --valid_batch_size=8 \
+    --max_num_epochs=500 \
+    --scheduler_patience=40 \
+    --patience=20 \
+    --eval_interval=1 \
     --ema \
-    --ema_decay=0.99 \
-    --amsgrad \
-    --default_dtype="float64" \
+    --swa \
+    --start_swa=400 \
+    --swa_lr=0.00025 \
+    --swa_forces_weight=10 \
+    --num_workers=64 \
+    --error_table='PerAtomMAE' \
+    --default_dtype="float32"\
     --device=cuda \
-    --seed=3\
-    --save_cpu\
-    --patience=5\
-    --swa\
+    --seed=123 \
+    --restart_latest \
+    --distributed \
+    --save_cpu \
     --forces_key='forces'\
     --energy_key='energy'\
-    #--becs_key='becs'
-
-
-    
+    --multiheads False \
