@@ -10,29 +10,22 @@ from pymatgen.io.vasp.inputs import Kpoints
 import numpy as np
 
 
-atoms = read('POSCAR')
-calc_1 = mace_mp(model="/home/poyen/BTO_MLFF/MACE/MACE_large_100.model", device='cuda')
-calc_2 = mace_mp(model='/home/poyen/BTO_MLFF/MACE/LES_model/test_2/MACE_BTO_stagetwo.model', device='cuda')  # 使用finetuned模型的计算器
-#calc_1 = MACECalculator(model_path='/home/poyen/BTO_MLFF/MACE/MACEField_from_BTO_LES/MACE_Field.model', device='cuda', model_type = "MACEField")  # 使用finetuned模型的计算器
+atoms = read('POSCAR_primitive')
+calc_1 = mace_mp(model="../../BTO_MACE.model", device='cuda')
+calc_2 = mace_mp(model='../../BTO_MACELES.model', device='cuda')  # 使用finetuned模型的计算器
 supercell_size = (3, 3, 3)
 ph_1 = Phonons(atoms, calc_1, supercell=supercell_size)
 ph_1.run()
 ph_1.read(acoustic=True)
 ph_1.clean()
-#path = atoms.cell.bandpath('GX',npoints=101) #trigonal: 'GLB1,BGX,QFZ,LP', orthorhombic:'GRSXASGRA1R,ST'
 path_1 = atoms.cell.bandpath(npoints=101) 
-#print(path)
 bs_1 = ph_1.get_band_structure(path_1, modes = False, born = False)
 
-calc_2 = mace_mp(model='/home/poyen/BTO_MLFF/MACE/LES_model/test_2/MACE_BTO_stagetwo.model', device='cuda')  # 使用finetuned模型的计算器
 ph_2 = Phonons(atoms, calc_2, supercell=supercell_size)
 ph_2.run()
 ph_2.read(acoustic=True)
 ph_2.clean()
-#path = atoms.cell.bandpath('GX',npoints=101) #trigonal: 'GLB1,BGX,QFZ,LP', orthorhombic:'GRSXASGRA1R,ST'
 path_2 = atoms.cell.bandpath(npoints=101) 
-#print(path)
-
 bs_2 = ph_2.get_band_structure(path_2, modes = False, born = False)
 
 
@@ -59,7 +52,7 @@ for spin, e_kn in enumerate(bs_energies_2):
 
 
 
-struct = Poscar.from_file("/home/poyen/BTO_MLFF/tetragonal/phonon_LO_TO/phonon_calculation/POSCAR").structure
+struct = Poscar.from_file("/POSCAR_primitive").structure
 kpath = HighSymmKpath(struct)
 kpts = Kpoints.automatic_linemode(divisions = 40, ibz = kpath)
 
@@ -84,7 +77,7 @@ for n in range(len(new_list)):
     if new_list[n] =="\\Gamma":
         new_list[n] ="$\Gamma$"
 
-with open("/home/poyen/BTO_MLFF/tetragonal/phonon_LO_TO/phonon_calculation/band.dat", "r") as PS_file:
+with open("./band_NAC.dat", "r") as PS_file:
     PS_x_1 = []
     PS_y_1 = []
     PS_x_n = []
@@ -109,7 +102,7 @@ with open("/home/poyen/BTO_MLFF/tetragonal/phonon_LO_TO/phonon_calculation/band.
 
 print(np.shape(PS_x_1), np.shape(PS_y_1))
 
-with open("/home/poyen/BTO_MLFF/tetragonal/phonon_PS/band.dat", "r") as PS_file:
+with open("./band.dat", "r") as PS_file:
     PS_x_2 = []
     PS_y_2 = []
     PS_x_n = []
@@ -132,15 +125,10 @@ with open("/home/poyen/BTO_MLFF/tetragonal/phonon_PS/band.dat", "r") as PS_file:
             PS_y_n.append(float(ln[1]))
         PS_n+=1
 
-#print(np.shape(PS_x_2), np.shape(PS_y_2))
-
-
 endpoint = np.array([float(l) for l in endpoint])
-#print(endpoint[-1])
 
 import matplotlib.pyplot as plt
 
-#plt.figure(dpi = 300, figsize = (2, 5))
 plt.Figure(dpi = 300)
 for i in range(len(PS_x_1)):
     if i == 0:
@@ -166,15 +154,9 @@ for spin, e_kn in enumerate(bs_energies_2):
     for e_k in e_kn.T[1:]:
         f = e_k*241.8
         plt.plot(xcoords_2/max(xcoords_2)*endpoint[-1], f, color = "blue")
-#print()
-print(np.shape(e_kn))
 plt.xticks(endpoint, new_list, fontsize = 12)
 plt.yticks(fontsize = 12)
-plt.xlim(endpoint[0], endpoint[-1])
-#plt.xlim(endpoint[0], endpoint[1])
-#plt.ylim(15, 25)
+plt.xlim(endpoint[0], endpoint[-1]))
 plt.ylabel("Frequency (THz)", fontsize = 14)
-#plt.legend(frameon = False, bbox_to_anchor = (0.85,1), fontsize = 12)
 plt.tight_layout()
-#plt.savefig('phonon_MACELES_comparison_333.png')
-print(new_list)
+plt.savefig('phonon_MACELES_comparison_333.png')
